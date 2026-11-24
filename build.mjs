@@ -29,6 +29,7 @@ export async function build(production = false, input = config, output = new URL
   const urls = [];
   for (const [file,title,description,body] of pages(c)) {
     const url = c.base ? c.base + '/' + (file === 'index.html' ? '' : file) : '';
+    const imageUrl = c.base ? c.base + '/assets/images/hero-palace.webp' : '';
     if (url) urls.push(url);
     const org = {'@type':'Organization',name:c.brand,areaServed:{'@type':'City',name:c.city}};
     const website = {'@type':'WebSite',name:c.brand};
@@ -43,12 +44,12 @@ export async function build(production = false, input = config, output = new URL
 <title>${escape(title)}</title><meta name="description" content="${escape(description)}">
 <meta name="robots" content="${production?'index,follow':'noindex,nofollow'}">
 <meta name="referrer" content="no-referrer"><meta name="theme-color" content="#fffcf3">
-<meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website">
-${url?`<link rel="canonical" href="${url}"><meta property="og:url" content="${url}">`:''}
+<meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website">${imageUrl?`<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${escape(imageUrl)}">`:'<meta name="twitter:card" content="summary">'}
+${url?`<link rel="canonical" href="${escape(url)}"><meta property="og:url" content="${escape(url)}"><meta property="og:image" content="${escape(imageUrl)}"><meta property="og:image:alt" content="Mysore Palace and Mysore Cabs taxi">`:''}
 <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./assets/style.css?v=5">
 ${file==='index.html'?`<script type="application/ld+json">${json({'@context':'https://schema.org','@graph':graph})}</script>`:''}
 <script type="application/json" id="site-config">${json(runtime)}</script><script type="module" src="./assets/site.js?v=3"></script>
-<noscript><style>@media(max-width:767px){.header nav{display:flex;position:static;box-shadow:none}}</style></noscript></head><body>${body}</body></html>`);
+<noscript><style>@media(max-width:1000px){.header-inner{flex-wrap:wrap}.header nav{display:flex;position:static;order:3;flex:0 0 100%;max-height:none;flex-direction:column;align-items:stretch;box-shadow:none}.menu{display:none}}</style></noscript></head><body>${body}</body></html>`);
   }
   await writeFile(new URL('robots.txt',output),'User-agent: *\nDisallow:\n'+(c.base?'\nSitemap: '+c.base+'/sitemap.xml\n':''));
   await writeFile(new URL('sitemap.xml',output),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls.map(url=>'<url><loc>'+escape(url)+'</loc></url>').join('')+'</urlset>\n');

@@ -32,6 +32,7 @@ const menu = document.querySelector('.menu');
 const nav = document.getElementById('navigation');
 function toggleMenu(open) {
   menu.setAttribute('aria-expanded',String(open));
+  menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');
   nav.classList.toggle('open',open);
 }
 menu.addEventListener('click',()=>toggleMenu(menu.getAttribute('aria-expanded')==='false'));
@@ -181,9 +182,12 @@ for (const slider of document.querySelectorAll('.slider')) {
   };
   const move = direction => {
     const first = rail.firstElementChild;
-    const step = first.nextElementSibling.offsetLeft - first.offsetLeft;
+    if (!first) return;
+    const step = first.nextElementSibling
+      ? first.nextElementSibling.offsetLeft - first.offsetLeft
+      : first.getBoundingClientRect().width;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    rail.scrollBy({left: direction * step, behavior: reduced ? 'instant' : 'smooth'});
+    rail.scrollBy({left: direction * step, behavior: reduced ? 'auto' : 'smooth'});
   };
   controls.hidden = false;
   previous.addEventListener('click', () => move(-1));
@@ -197,15 +201,45 @@ for (const slider of document.querySelectorAll('.slider')) {
   new ResizeObserver(sync).observe(rail);
   sync();
 }
+const navLinks = [...nav.querySelectorAll('a')];
+const navSections = navLinks
+  .filter(link => new URL(link.href).pathname === location.pathname)
+  .map(link => document.getElementById(decodeURIComponent(new URL(link.href).hash.slice(1))))
+  .filter(Boolean);
 function updateCurrentLink() {
-  const current = location.hash || '#home';
-  for (const link of nav.querySelectorAll('a')) {
-    if (link.pathname === location.pathname && link.hash === current || location.pathname === '/' && link.getAttribute('href') === current) {
+  let current = location.hash.slice(1) || 'home';
+  if (navSections.length) {
+    const marker = document.querySelector('.header').offsetHeight + 32;
+    let activeTop = -Infinity;
+    for (const section of navSections) {
+      const top = section.getBoundingClientRect().top;
+      if (top <= marker && top > activeTop) {
+        current = section.id;
+        activeTop = top;
+      }
+    }
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) {
+      current = 'contact';
+    }
+  }
+  for (const link of navLinks) {
+    const target = new URL(link.href);
+    if (target.pathname === location.pathname && target.hash === '#'+current) {
       link.setAttribute('aria-current','location');
     } else {
       link.removeAttribute('aria-current');
     }
   }
 }
+let scrollUpdateQueued = false;
+window.addEventListener('scroll',()=>{
+  if (scrollUpdateQueued) return;
+  scrollUpdateQueued = true;
+  requestAnimationFrame(()=>{
+    scrollUpdateQueued = false;
+    updateCurrentLink();
+  });
+},{passive:true});
+window.addEventListener('resize',updateCurrentLink);
 window.addEventListener('hashchange', updateCurrentLink);
 updateCurrentLink();

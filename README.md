@@ -4,7 +4,7 @@ Static landing page and legal pages for Mysore taxi fare enquiries. The build us
 
 ## Local preview
 
-Run `npm run preview` with Node.js 22 and open [the local preview](http://127.0.0.1:4173/). Set `MYSORE_PREVIEW_PORT` to choose a starting port; if it is occupied, the preview automatically tries the next available port. The current session uses port 4330. Run `npm run build` to build `dist/` or `npm test` to run the source checks. In the Windows sandbox, invoke Node with `--preserve-symlinks --preserve-symlinks-main` before the script or test flag.
+Run `npm run preview` with Node.js 22 and open [the local preview](http://127.0.0.1:4173/). Set `MYSORE_PREVIEW_PORT` to choose a starting port; if it is occupied, the preview automatically tries the next available port. Run `npm run build` to build `dist/` or `npm test` to run the source checks. In the Windows sandbox, invoke Node with `--preserve-symlinks --preserve-symlinks-main` before the script or test flag.
 
 The preview is noindex. Call and WhatsApp links use a local preview dialog for the placeholder number. The configured destinations are `tel:+911234567890` and `https://wa.me/911234567890`. A valid form produces a copyable WhatsApp message. An approved production configuration enables direct contact.
 
@@ -34,14 +34,14 @@ In GA4, turn off automatic outbound-click and form-interaction measurement befor
 
 ## Assets and content
 
-Poppins and the Font Awesome Free solid and brands webfonts are served locally. Their licenses are bundled in assets/fonts/.
+Inter (400–700), Poppins (400, 600, 700, 800 and 900), and the Font Awesome Free solid and brands webfonts are served locally. Their licenses are bundled in assets/fonts/.
 
 `IMAGE_ASSET_DIR` in `config.mjs` records the supplied image directory on E:. Optimized copies are bundled with the project. See [the asset manifest](ASSET-MANIFEST.md) for the mapping. Enter genuine supplied reviews in `reviews` as records with `name` and `review`. The component renders only when populated. The quote-only pricing section uses copy in `pages.mjs`. Update it when the business approves fares. Business and tracking details are in `config.mjs`.
 
 ## Verification
 
-Headless Edge captured the implementation at 360 × 800, 390 × 844, 768 × 900, 1024 × 900, 1366 × 900 and 1440 × 900 in `.preview/current/`. At these widths the form used 1, 1, 3, 3, 6 and 6 columns respectively. At each width the document scroll width equalled the available viewport width. Browser checks covered arrow-key slider movement, reverse-route prefill, required fields, past-date rejection, the copyable quote dialog, FAQ expansion and policy navigation. Unit tests verify URL encoding, the preview contact destinations, indexing metadata and analytics gating. No calls or messages were sent.
+Run `npm run build` and `npm test` for local checks. The browser preview is noindex and uses a local contact dialog for the configured placeholder number. No calls or messages are sent during verification.
 
-The reference was reviewed for page structure and functionality. The implementation uses a distinct visual design. Pixel-level overlays against the reference were outside the distinct design used here. Production tag delivery requires the business GTM container.
+The public reference is used only for layout comparison; its business details, claims, pricing and reviews are not used. Real business contact details, genuine reviews, approved service terms, the production HTTPS origin and any GTM container remain owner-supplied dependencies.
 
 

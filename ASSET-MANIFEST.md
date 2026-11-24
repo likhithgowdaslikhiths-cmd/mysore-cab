@@ -5,6 +5,7 @@ Source directory is `E:/mysore-cabs-assets/assets/images`. The table maps the su
 | Role | Source file | Source dimensions | Output file and dimensions | Uses |
 | --- | --- | --- | --- | --- |
 | hero-palace | hero/mysore-palace-golden-hour.webp | 1672 × 941 | hero-palace.webp (1672 × 941) | Hero, Mysore package and destination |
+| hero-palace responsive | hero/mysore-palace-golden-hour.webp | 1672 × 941 | hero-palace-small.webp (640 × 360) | Smaller hero and Mysore card requests via `srcset` |
 | logo | logo/Mysore Cabs Gold Palace Taxi Logo.png | 2172 × 724 transparent | logo.webp (540 × 180) | Header and footer |
 | crysta | vehicles/innova-crysta-white.png | 1754 × 896 transparent | crysta.webp (1100 × 562) | Fleet and pricing |
 | sedan | vehicles/etios-sedan-white.png | 1756 × 895 transparent | sedan.webp (960 × 489) | Fleet and pricing |

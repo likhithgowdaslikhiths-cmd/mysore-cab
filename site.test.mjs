@@ -13,7 +13,16 @@ test('preview forces safe contact and production rejects placeholder details',()
   assert.equal(preview.tracking,false);
   assert.equal(preview.tel,'tel:+911234567890');
   assert.equal(preview.whatsapp,'https://wa.me/911234567890');
-  assert.doesNotMatch(pages(preview).map(p=>p[3]).join(''),/href="(?:tel:|https:\/\/wa\.me)/);
+  const previewHtml = pages(preview).map(p=>p[3]).join('');
+  assert.match(previewHtml,/data-contact="call"[^>]+href="tel:\+911234567890"/);
+  assert.match(previewHtml,/data-contact="whatsapp"[^>]+href="https:\/\/wa\.me\/911234567890"/);
+  assert.equal((pages(preview)[0][3].match(/<h1\b/g) || []).length,1);
+  assert.match(previewHtml,/class="hero-car"/);
+  assert.match(previewHtml,/class="hero-highlights"/);
+  assert.match(previewHtml,/class="package-meta"/);
+  assert.match(previewHtml,/hero-palace-small\.webp 640w/);
+  assert.match(previewHtml,/href="#faqs"/);
+  assert.match(previewHtml,/class="mobile-actions" aria-label="Quick contact"/);
   assert.throws(()=>resolveConfig(config,true),/Production requires/);
   assert.throws(()=>resolveConfig({...config,phone:'0000000000',demoMode:false,allowIndexing:true,siteUrl:'https://example.com'},true),/public HTTPS/);
 });
@@ -63,6 +72,8 @@ test('generated production metadata uses the supplied origin and active contact'
     assert.doesNotMatch(page,/1234567890/);
   }
   assert.match(home,/"telephone":"\+910000000000"/);
+  assert.ok(home.includes('property="og:image" content="'+origin+'/assets/images/hero-palace.webp"'));
+  assert.ok(home.includes('name="twitter:image" content="'+origin+'/assets/images/hero-palace.webp"'));
   assert.match(home,/href="tel:\+910000000000"/);
   assert.ok(robots.includes('Sitemap: '+origin+'/sitemap.xml'));
   assert.doesNotMatch(robots,/AdsBot|Disallow: \//);
