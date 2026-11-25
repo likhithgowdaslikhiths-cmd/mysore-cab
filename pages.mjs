@@ -27,23 +27,21 @@ export function pages(c) {
     const item = c.images[id];
     if (!item) return `<div class="image-slot ${cls}" aria-hidden="true"></div>`;
     const responsivePalace = item.file === 'hero-palace.webp'
-      ? `srcset="./assets/images/hero-palace-small.webp 640w, ./assets/images/hero-palace.webp 1672w" sizes="${id === 'hero-palace' ? '(max-width: 767px) 100vw, 58vw' : '(max-width: 767px) 84vw, (max-width: 1199px) 33vw, 25vw'}"`
+      ? `srcset="./assets/images/hero-palace-small.webp 640w, ./assets/images/hero-palace.webp 1672w" sizes="${id === 'hero-palace' ? '(max-width: 767px) calc(100vw - 32px), (max-width: 899px) calc(100vw - 72px), (max-width: 1199px) 92vw, 48vw' : '(max-width: 767px) 84vw, (max-width: 1199px) 33vw, 25vw'}"`
       : '';
-    const loading = id === 'hero-palace' || id === 'crysta'
-      ? 'fetchpriority="high" decoding="async"'
-      : id === 'logo' ? 'decoding="async"' : 'loading="lazy"';
+    const loading = id === 'logo' ? 'decoding="async"' : 'loading="lazy"';
     return `<img class="${cls}" src="./assets/images/${escape(item.file)}" ${responsivePalace} width="${item.width}" height="${item.height}" alt="${escape(item.alt)}" ${loading}>`;
   };
   const slider = (id, label, cards) => `<div class="slider"><div tabindex="0" class="rail" id="${id}" role="region" aria-label="${label}">${cards}</div><div class="slider-actions" hidden><button type="button" aria-controls="${id}" data-slide="-1" aria-label="Previous ${label}">${icon('previous')}</button><button type="button" aria-controls="${id}" data-slide="1" aria-label="Next ${label}">${icon('next')}</button></div></div>`;
-  const form = `<form id="quote" class="wrap quote" aria-labelledby="quote-title" novalidate>
-    <h2 id="quote-title">Get a Cab Quote in Mysore</h2><p>Enter your pickup, destination, travel date and vehicle preference to prepare your WhatsApp enquiry.</p>
+  const form = `<form id="quote" class="quote hero-quote" aria-labelledby="quote-title" novalidate>
+    <div class="quote-heading"><p class="eyebrow">Request a fare</p><h2 id="quote-title">Where are you headed?</h2><p>Enter your route, travel date and vehicle preference.</p></div>
     <fieldset id="quote-fields" disabled><legend class="sr-only">Trip details</legend><div class="fields">
     ${field('pickup','Pickup location','<input required maxlength="120" placeholder="e.g. Mysore Zoo">')}
     ${field('destination','Drop location','<input required maxlength="120" placeholder="e.g. Coorg">')}
     ${field('trip','Trip type','<select required><option value="">Choose trip</option>'+options(Object.entries(c.trips))+'</select>')}
     ${field('departure','Travel date','<input type="date" required>')}
     ${field('vehicle','Vehicle type','<select required><option value="">Choose vehicle</option>'+options(c.vehicles.map(([id,t])=>[id,id==='sedan'?'Etios/Sedan':t]))+'<option value="help">Help Me Choose</option></select>')}
-    <button type="submit" class="btn yellow submit">Get Fare on WhatsApp</button></div></fieldset>
+    <button type="submit" class="btn yellow submit">Request fare</button></div></fieldset>
     <p class="form-note">Fare and availability are confirmed by the team.</p>
     <noscript><p>Enable JavaScript to prepare a trip message.</p></noscript>
   </form>`;
@@ -56,28 +54,27 @@ export function pages(c) {
   const benefits = [['pin','Mysore-based trip planning'],['road','Local and outstation choices'],['car','Vehicle options'],['group','Group enquiries'],['chat','WhatsApp quotations'],['arrow','Confirmation before booking']];
   const vehicleCards = c.vehicles.map(([id,t,d])=>`<article class="card vehicle">${image(id,'vehicle-image')}<div class="vehicle-copy"><span class="badge">Vehicle category</span><h3>${t}</h3><p>${d}</p><strong>Request Fare</strong>${quote(`data-vehicle="${id}"`,'dark','Get Vehicle Quote')}</div></article>`).join('');
   const landing = `<section id="home" class="hero"><div class="wrap hero-grid"><div class="hero-copy">
-    <p class="eyebrow">${icon('pin')} Cab booking in Mysore</p>
-    <h1>Mysore Cabs for Local, Airport &amp; Outstation Travel</h1>
-    <p class="intro">Plan city rides, Mysore airport taxi transfers, sightseeing and outstation cabs from Mysore. Choose your trip and vehicle preference, then request a fare on WhatsApp.</p>
-    <div class="actions">${quote('','yellow','Get a Cab Quote')}${contact('call','hero','Call Now','outline')}</div>
-    <ul class="hero-services">${[['city','Local Travel'],['plane','Airport Transfers'],['road','Outstation Trips']].map(([i,t])=>`<li>${icon(i)}${t}</li>`).join('')}</ul>
-    </div><div class="hero-visual">${image('hero-palace','hero-back')}${image('crysta','hero-car')}<ul class="hero-highlights" aria-label="Travel options"><li><strong>Mysore Routes</strong><span>Local and outstation</span></li><li><strong>Airport Transfers</strong><span>Pickup or drop-off</span></li><li><strong>Family Travel</strong><span>Vehicle choices</span></li></ul></div></div></section>
-    ${form}
-    ${section('services','Cab services in Mysore','Choose a taxi service that fits your trip.',`<div class="grid services">${c.services.map(([i,t,d,v])=>`<article class="card service-card"><span class="tile">${icon(i)}</span><h3>${t}</h3><p>${d}</p>${quote(`data-trip="${v}"`,'text')}</article>`).join('')}</div>`)}
+    <p class="eyebrow">${icon('pin')} Cab service in Mysore</p>
+    <h1>Need a cab <span>in Mysore?</span></h1>
+    <p class="intro">Local, airport and outstation rides in Mysore. Share your route to request a fare.</p>
+    <div class="actions">${quote('','yellow','Request a fare')}${contact('call','hero','Call Now','outline')}</div>
+    <ul class="hero-services">${[['city','Local rides'],['plane','Airport transfers'],['road','Outstation trips']].map(([i,t])=>`<li>${icon(i)}${t}</li>`).join('')}</ul>
+    </div>${form}</div></section>
+    ${section('services','Cab services in Mysore','Choose a taxi service that fits your trip.',`<div class="grid services">${c.services.map(([i,t,d,v])=>`<article class="card service-card"><span class="tile">${icon(i)}</span><h3>${t}</h3><p>${d}</p>${quote(`data-trip="${v}"`,'text')}</article>`).join('')}</div>`,'services-section')}
     ${section('routes','Popular routes','Start with a route and add your travel date.',slider('route-rail','routes',c.routes.filter(([id])=>id!=='airport').map(([id,t,d,v])=>{
       const reverse = id==='reverse';
       const pickup = reverse ? 'Bengaluru' : c.city;
       const heading = id==='bengaluru'?'Mysore to Bengaluru Cab':reverse?'Bengaluru to Mysore Cab':c.city+' to '+t+' Cab';
       return `<article class="card photo-card route-card">${image(reverse || id==='bengaluru'?'highway':id)}<div class="card-copy"><span class="badge">${c.trips[v]}</span><h3>${heading}</h3><p>${d}</p><ul class="details"><li>Pickup in ${pickup}</li><li>Vehicle choice with quote</li></ul><div class="card-action"><strong>Request Fare</strong>${quote(selectRoute(id,v,pickup,t),'yellow','Get Fare')}</div></div></article>`;
-    }).join('')))}
+    }).join('')),'route-section')}
     <section id="packages" class="section package-section"><div class="wrap"><div class="package-panel"><header class="section-head"><p class="eyebrow package-eyebrow">Explore Mysore and beyond</p><h2>Tour Packages</h2><p>Plan sightseeing, hill station travel or an airport transfer.</p></header><div class="grid packages">${packages.map(([id,t,cat,d,v])=>`<article class="card package-card">${image(id,'package-image')}<span class="badge">${cat}</span><div class="card-copy"><h3>${id==='mysore'?'Mysore Sightseeing':t}</h3><p>${d}</p><div class="package-meta"><span>${c.trips[v]}</span><span>Fare based on your itinerary</span></div><div class="card-action">${quote(selectRoute(id,v,c.city,t),'yellow','Get Package Quote')}</div></div></article>`).join('')}</div></div></div></section>
-    ${section('destinations','Destinations','Explore places you can include in your trip from Mysore.',slider('destination-rail','destinations',places.map(([id,t,cat,d,v])=>`<article class="card photo-card destination-card">${image(id)}<div class="card-copy"><span class="badge">${cat}</span><h3>${t}</h3>${quote(selectRoute(id,v,c.city,t),'text','Explore Trip')}</div></article>`).join('')))}
-    ${section('vehicles','Vehicles for your trip','Images represent vehicle categories. The team confirms the vehicle arrangement during quotation.',slider('vehicle-rail','vehicles',vehicleCards),'soft')}
+    ${section('destinations','Destinations','Explore places you can include in your trip from Mysore.',slider('destination-rail','destinations',places.map(([id,t,cat,d,v])=>`<article class="card photo-card destination-card">${image(id)}<div class="card-copy"><span class="badge">${cat}</span><h3>${t}</h3>${quote(selectRoute(id,v,c.city,t),'text','Explore Trip')}</div></article>`).join('')),'destination-section')}
+    ${section('vehicles','Vehicles for your trip','Images represent vehicle categories. The team confirms the vehicle arrangement during quotation.',slider('vehicle-rail','vehicles',vehicleCards),'soft fleet-section')}
     <section id="pricing" class="wrap pricing"><div><h2>Get a Fare for Your Mysore Trip</h2><p>Your route, vehicle, trip type and duration shape the quote. Ask about included kilometres or hours, tolls, parking, driver allowance and any other charges.</p>${quote()}</div>
     ${slider('price-rail','vehicle quotes',c.vehicles.map(([id,t])=>`<article class="card price-card">${image(id)}<h3>${t}</h3>${quote(`data-vehicle="${id}"`,'text','Get Quote')}</article>`).join(''))}</section>
-    ${section('benefits','Why choose Mysore Cabs?','Plan the ride around your itinerary and group.',`<ul class="benefits">${benefits.map(([i,t])=>`<li>${icon(i)}<span>${t}</span></li>`).join('')}</ul>`)}
+    ${section('benefits','Why choose Mysore Cabs?','Plan the ride around your itinerary and group.',`<ul class="benefits">${benefits.map(([i,t])=>`<li>${icon(i)}<span>${t}</span></li>`).join('')}</ul>`,'benefit-section')}
     ${c.reviews.length ? section('reviews','Customer reviews','',`<div class="grid reviews">${c.reviews.map(({name,review})=>`<article class="card"><h3>${escape(name)}</h3><p>${escape(review)}</p></article>`).join('')}</div>`) : ''}
-    ${section('faqs','Cab booking FAQs','Questions about planning a ride and requesting a quote.',`<div class="faqs">${faq.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`)}`;
+    ${section('faqs','Cab booking FAQs','Questions about planning a ride and requesting a quote.',`<div class="faqs">${faq.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`,'faq-section')}`;
   const support = [
     ['privacy.html','Privacy Policy','How trip details, WhatsApp and optional analytics work on this site.',`<h2>Trip details</h2><p>The form prepares a message in your browser. This site does not send your form details to a server or save them for later. If you choose to continue to WhatsApp, the prepared details are included in the handoff. You decide whether to send the message in WhatsApp.</p><h2>WhatsApp and hosting</h2><p>WhatsApp processes information according to its own terms and privacy policy. The hosting provider may keep ordinary request logs. Use the form only for details needed to quote your trip.</p><h2>Analytics preferences</h2><p>${c.tracking ? 'Optional Google Tag Manager measurement requires your permission. It receives limited interaction categories and field identifiers, with trip text excluded. Your choice is stored on this device.' : 'Analytics is disabled in this build.'}</p>`],
     ['terms.html','Terms and Conditions','Enquiry, quotation and trip confirmation terms for Mysore Cabs.',`<h2>Enquiries and confirmation</h2><p>A call, prepared message or WhatsApp enquiry starts a conversation. A booking is in place once the team confirms availability and the agreed itinerary and fare.</p><h2>Quotation details</h2><p>Confirm the vehicle, seating arrangement, route and fare inclusions with the team. Agree on applicable payment, change and cancellation terms before accepting the quotation.</p><h2>Changes to your plans</h2><p>Contact the team with your existing trip details to ask about changes, cancellation and any conditions agreed for that trip.</p>`],

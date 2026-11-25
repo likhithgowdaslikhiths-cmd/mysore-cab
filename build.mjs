@@ -43,10 +43,10 @@ export async function build(production = false, input = config, output = new URL
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${escape(title)}</title><meta name="description" content="${escape(description)}">
 <meta name="robots" content="${production?'index,follow':'noindex,nofollow'}">
-<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#fffcf3">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#f1f5f6">
 <meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website">${imageUrl?`<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${escape(imageUrl)}">`:'<meta name="twitter:card" content="summary">'}
 ${url?`<link rel="canonical" href="${escape(url)}"><meta property="og:url" content="${escape(url)}"><meta property="og:image" content="${escape(imageUrl)}"><meta property="og:image:alt" content="Mysore Palace and Mysore Cabs taxi">`:''}
-<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./assets/style.css?v=5">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./assets/style.css?v=8">
 ${file==='index.html'?`<script type="application/ld+json">${json({'@context':'https://schema.org','@graph':graph})}</script>`:''}
 <script type="application/json" id="site-config">${json(runtime)}</script><script type="module" src="./assets/site.js?v=3"></script>
 <noscript><style>@media(max-width:1000px){.header-inner{flex-wrap:wrap}.header nav{display:flex;position:static;order:3;flex:0 0 100%;max-height:none;flex-direction:column;align-items:stretch;box-shadow:none}.menu{display:none}}</style></noscript></head><body>${body}</body></html>`);

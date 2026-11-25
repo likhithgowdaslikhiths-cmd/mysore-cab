@@ -17,8 +17,14 @@ test('preview forces safe contact and production rejects placeholder details',()
   assert.match(previewHtml,/data-contact="call"[^>]+href="tel:\+911234567890"/);
   assert.match(previewHtml,/data-contact="whatsapp"[^>]+href="https:\/\/wa\.me\/911234567890"/);
   assert.equal((pages(preview)[0][3].match(/<h1\b/g) || []).length,1);
-  assert.match(previewHtml,/class="hero-car"/);
-  assert.match(previewHtml,/class="hero-highlights"/);
+  assert.doesNotMatch(previewHtml,/class="hero-car"/);
+  assert.doesNotMatch(previewHtml,/class="hero-image-caption"/);
+  assert.match(previewHtml,/class="quote hero-quote"/);
+  const home = pages(preview)[0][3];
+  assert.ok(home.indexOf('class="hero-copy"') < home.indexOf('class="quote hero-quote"'));
+  assert.equal(home.includes('class="hero-visual"'),false);
+  assert.match(home,/Need a cab <span>in Mysore\?<\/span>/);
+  assert.match(previewHtml,/class="section route-section"/);
   assert.match(previewHtml,/class="package-meta"/);
   assert.match(previewHtml,/hero-palace-small\.webp 640w/);
   assert.match(previewHtml,/href="#faqs"/);
